@@ -1,5 +1,6 @@
 const runButton = document.getElementById("runbutton");
 const description = document.querySelector("main p");
+const scrapeLocations = document.getElementById("scrape-locations");
 
 document.addEventListener("DOMContentLoaded", function() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -10,16 +11,13 @@ document.addEventListener("DOMContentLoaded", function() {
             runButton.hidden = true;
             dataFormat.hidden = true;
         } else {
+            scrapeLocations.hidden = false;
             runButton.addEventListener('click', function() {
                 chrome.scripting.executeScript({
                     target: {tabId: currentTab.id},
                     function: scrapeListings
-                }, function(output) {
-                    if (dataFormat.value == "csv") {
-                        parseCsv(output[0].result);
-                    } else {
-                        parseMarkdown(output[0].result);
-                    }
+                }, (out) => {
+                    console.log(out);
                     console.log("Done.");
                 });
             });

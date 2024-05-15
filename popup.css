@@ -17,6 +17,10 @@ main {
     padding-bottom: 40px;
 }
 
+#scrape-locations {
+    width: 40%;
+}
+
 #runbutton {
     background-color: #fff000;
     border-style: 2px solid;
