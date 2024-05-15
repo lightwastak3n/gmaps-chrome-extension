@@ -17,6 +17,11 @@ main {
     padding-bottom: 40px;
 }
 
+main select {
+    width: 20%;
+}
+
+
 #scrape-locations {
     width: 40%;
 }
