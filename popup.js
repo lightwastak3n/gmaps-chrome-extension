@@ -2,6 +2,7 @@ const runButton = document.getElementById("runbutton");
 const description = document.querySelector("main p");
 const formatChoice = document.querySelector("main select");
 const scrapeLocations = document.getElementById("scrape-locations");
+const typeOfBusiness = document.getElementById("business-type");
 
 
 let currentTab;
@@ -12,6 +13,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         runButton.hidden = true;
         formatChoice.hidden = true;
         scrapeLocations.hidden = true;
+        typeOfBusiness.hidden = true;
     }
 })
 
@@ -134,5 +136,27 @@ function processData(data) {
 }
 
 
+function getLocationsList() {
+    scrapeLocations.value.split(",");
+}
 
+
+function goToLocation(location) {
+    const searchId = "searchboxinput";
+    const searchBox = document.getElementById(searchId);
+    searchBox.value = location;
+    
+    const buttonId = "searchbox-searchbutton";
+    const searchButton = document.getElementById(buttonId);
+    searchButton.click();
+}
+
+
+async function processLocations() {
+    const locationsList = getLocationsList();
+    for (let i = 0; i < locationsList.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        goToLocation(location);
+    }
+}
 

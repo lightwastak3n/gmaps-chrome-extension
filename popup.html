@@ -9,12 +9,18 @@
         <h1>Google Maps Scraper</h1> 
 
         <main>
-            <p> 
-                Zoom to a region of interest, search for a business, and press Run. The results will be scrolled automatically until we reach the bottom or time limit and then scraped.
-                <br>
-                Data will be downloaded as .csv file.
+            <p>
+                Enter a type of business to be scraped.
+                <br><br>
+                Write comma separated list of locations (London, Paris, Berlin). 
+                <br><br>
+                Choose a data format. csv will be downloaded and markdown will be displayed in a new tab. 
+                <br><br>
+                Press Run to get the data. Locations will be searched and lists will be scrolled automatically. It should take 20-40 seconds per location.
+                Scrolling is capped at 40 seconds or until we reach the bottom.
             </p>
-            <input id="scrape-locations" type="text" name="scrape-locations" value="">
+            <input id="business-type" type="text" name="business-type" value="" placeholder="Type of business">
+            <input id="scrape-locations" type="text" name="scrape-locations" value="" placeholder="List of locations">
             <select>
                 <option value="csv">csv</option>
                 <option value="markdown">Markdown</option>

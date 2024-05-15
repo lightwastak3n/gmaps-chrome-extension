@@ -23,6 +23,10 @@ main select {
 
 
 #scrape-locations {
+    width: 50%;
+}
+
+#business-type {
     width: 40%;
 }
 
