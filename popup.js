@@ -21,7 +21,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 runButton.addEventListener('click', async function() {
     // Get the data from the extension inputs
     const searchStrings = getSearchStrings();
-    const data = [];
+    let data = [["name", "type", "rating", "address", "phone", "website"]];
     const rawData = [];
     for (searchStr of searchStrings) {
         const newUrl = createUrl(searchStr);
@@ -79,7 +79,7 @@ function scrapeListings() {
         const match = linkRegex.exec(str);
         return match ? match[1] : "";
     }
-    let places = [["name", "type", "rating", "address", "phone", "website"]];
+    let places = []
     const links = Array.from(document.querySelectorAll(".lI9IFe"));
     for (let i = 0; i < links.length; i++) {
         const link = links[i];
