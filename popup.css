@@ -1,0 +1,60 @@
+body {
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem; 
+    min-width: 400px;
+    background-image: url("images/background.jpg");
+    background-size: cover;
+}
+
+h1 {
+    font-size: 1.4rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    padding-bottom: 40px;
+}
+
+#runbutton {
+    background-color: #fff000;
+    border-style: 2px solid;
+    border-radius: 12px;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 15px;
+    text-align: center;
+    transition: 200ms;
+    width: 40%;
+    box-sizing: border-box;
+    font-size: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+#runbutton:not(:disabled):hover,
+.button-32:not(:disabled):focus {
+    outline: 0;
+    background: #f4e603;
+    box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+#runbutton:disabled {
+    filter: saturate(0.2) opacity(0.5);
+    -webkit-filter: saturate(0.2) opacity(0.5);
+    cursor: not-allowed;
+}
+
+#progress {
+    padding-bottom: 40px;
+}
+
+#attributions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 0.8rem; 
+}
