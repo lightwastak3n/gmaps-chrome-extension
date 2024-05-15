@@ -19,15 +19,29 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 
 
 runButton.addEventListener('click', async function() {
-    await chrome.scripting.executeScript({
-        target: {tabId: currentTab.id},
-        function: scrollListings
-    });
-    let data = await chrome.scripting.executeScript({
-        target: {tabId: currentTab.id},
-        function: scrapeListings
-    });
-    processData(data[0].result);
+    // Get the data from the extension inputs
+    const searchStrings = getSearchStrings();
+    const data = [];
+    const rawData = [];
+    for (searchStr of searchStrings) {
+        const newUrl = createUrl(searchStr);
+
+        await chrome.tabs.update(currentTab.id, {url: newUrl});
+        // Wait for the page load
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        await chrome.scripting.executeScript({
+            target: {tabId: currentTab.id},
+            function: scrollListings
+        });
+        let locData = await chrome.scripting.executeScript({
+            target: {tabId: currentTab.id},
+            function: scrapeListings
+        });
+        rawData.push(locData);
+        data.push(...locData[0].result)
+    }
+    processData(data)
 });
 
 
@@ -83,7 +97,9 @@ function scrapeListings() {
 
 function parseCsv(data) {
     console.log("Parsing csv.");
+    console.log("For data", data);
 
+    // Removing some chars to get a valid csv
     const cleanStr = (str) => {
         if (!str) {
             return "";
@@ -110,7 +126,6 @@ function parseCsv(data) {
 
 function parseMarkdown(data) {
     console.log("Parsing Markdown.");
-
     let markdownTable = "";
     for (let i = 0; i < data.length; i++) {
         let row = data[i];
@@ -121,7 +136,6 @@ function parseMarkdown(data) {
             markdownTable += row.map(() => "----").join(" | ") + " |\n";
         }
     }
-
     // Open the Markdown table in a new tab
     chrome.tabs.create({ url: "data:text/plain;charset=utf-8," + encodeURIComponent(markdownTable) });
 }
@@ -135,28 +149,31 @@ function processData(data) {
     }
 }
 
-
-function getLocationsList() {
-    scrapeLocations.value.split(",");
+function getSearchStrings() {
+    const locations = scrapeLocations.value.split(",");
+    const bType = typeOfBusiness.value;
+    const searchStrings = [];
+    for (loc of locations) {
+        searchStrings.push(`${bType} in ${loc.trim()}`);
+    }
+    return searchStrings;
 }
 
 
-function goToLocation(location) {
+async function runSearch(searchStr) {
+    // Switched from this to directly changing url
     const searchId = "searchboxinput";
     const searchBox = document.getElementById(searchId);
-    searchBox.value = location;
-    
+    searchBox.value = searchStr;
     const buttonId = "searchbox-searchbutton";
     const searchButton = document.getElementById(buttonId);
     searchButton.click();
+    // Wait for result load before returning
+    await new Promise(resolve => setTimeout(resolve, 2000));
 }
 
-
-async function processLocations() {
-    const locationsList = getLocationsList();
-    for (let i = 0; i < locationsList.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        goToLocation(location);
-    }
+function createUrl(searchStr) {
+    const words = searchStr.split(" ").join("+")
+    return `https://www.google.com/maps/search/${words}`
 }
 
