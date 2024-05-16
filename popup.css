@@ -3,7 +3,6 @@ body {
     font-size: 1rem; 
     color: #F8F8F2;
     min-width: 400px;
-    /* background-color: #282A36; */
     background-image: url("images/map_lights_dracula.jpg");
     background-position: center;
 }
@@ -116,15 +115,24 @@ a:visited {
     cursor: not-allowed;
 }
 
-#progress {
+#bottom {
     width: 100%;
-    background-color: gray;
+    padding: 0 10%;
 }
 
-#progress-bar {
-    width: 10%;
-    height: 20px;
-    background-color: green;
+#progress-section {
+    width: 80%;
+    height: 35px;
+    padding: 5px 5px;
+    border-radius: 20px;
+    background-color: #44475A;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#leads-num {
+    color: #FF5555;
 }
 
 #attributions {

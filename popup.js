@@ -4,7 +4,10 @@ const notOnMaps = document.getElementById("not-on-maps");
 const formatChoice = document.querySelector("main select");
 const scrapeLocations = document.getElementById("scrape-locations");
 const typeOfBusiness = document.getElementById("business-type");
-const progressBar = document.getElementById("progress-bar");
+const leadsStatus = document.getElementById("leads-num");
+const bottomSection = document.getElementById("bottom");
+const currentTask = document.getElementById("current-task");
+
 
 
 let currentTab;
@@ -18,7 +21,6 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         formatChoice.hidden = true;
         scrapeLocations.hidden = true;
         typeOfBusiness.hidden = true;
-        progressBar.hidden = true;
         notOnMaps.hidden = false;
     }
 })
@@ -28,18 +30,21 @@ runButton.addEventListener('click', async function() {
     // Get the data from the extension inputs
     const searchStrings = getSearchStrings();
     // Setup progress bar
-    // progressBar.hidden = false;
+    bottomSection.hidden = false;
     let progressVal = 0;
+    let leadsTotal = 0;
     const progressStep = 100 / Math.max(1, searchStrings.length);
 
     let data = [["name", "type", "rating", "address", "phone", "website"]];
-    for (searchStr of searchStrings) {
+    for (const searchStr of searchStrings) {
+        updateTask(searchStr);
         const newUrl = createUrl(searchStr);
         let newData = await getLocationListings(newUrl);
         data.push(...newData);
 
         progressVal += progressStep;
-        updateProgress(progressVal);
+        leadsTotal += newData.length;
+        updateLeads(leadsTotal);
     }
     // Search current google maps view if the inputs are empty 
     if (searchStrings.length === 0) {
@@ -80,6 +85,7 @@ async function scrollListings() {
         } else {
             break;
         }
+        // Wait for the new results to load
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
 }
@@ -180,7 +186,7 @@ function getSearchStrings() {
             let sString = bType.length > 0 ? `${bType} in ${loc.trim()}` : loc.trim();
             searchStrings.push(sString);
         }
-    
+    } 
     return searchStrings;
 }
 
@@ -204,7 +210,12 @@ function createUrl(searchStr) {
 }
 
 
-function updateProgress(val) {
-    progressBar.style.width += val;
+function updateLeads(val) {
+    leadsStatus.innerText = val;
+}
+
+
+function updateTask(val) {
+    currentTask.innerText = val;
 }
 
