@@ -7,11 +7,11 @@
     "host_permissions": ["https://google.com/maps/*"],
     "action": {
         "default_popup": "popup.html",
-        "default_icon": "images/icon16.png"
+        "default_icon": "images/16.png"
     },
     "icons": {
-        "16": "images/icon16.png",
-        "48": "images/icon48.png",
-        "128": "images/icon128.png"
+        "16": "images/16.png",
+        "48": "images/48.png",
+        "128": "images/128.png"
     }
 }
