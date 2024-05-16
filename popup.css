@@ -1,6 +1,6 @@
 body {
     font-family: "Roboto", sans-serif;
-    font-size: 1rem; 
+    font-size: 0.8rem; 
     min-width: 400px;
     background-image: url("images/background.jpg");
     background-size: cover;
@@ -14,13 +14,11 @@ main {
     display: flex;
     flex-direction: column;
     row-gap: 5px;
-    padding-bottom: 40px;
 }
 
 main select {
     width: 20%;
 }
-
 
 #scrape-locations {
     width: 50%;
@@ -62,10 +60,18 @@ main select {
 }
 
 #progress {
-    padding-bottom: 40px;
+    width: 100%;
+    background-color: gray;
+}
+
+#progress-bar {
+    width: 10%;
+    height: 20px;
+    background-color: green;
 }
 
 #attributions {
+    padding-top: 40px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

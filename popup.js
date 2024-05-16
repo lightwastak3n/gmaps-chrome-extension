@@ -1,19 +1,25 @@
 const runButton = document.getElementById("runbutton");
-const description = document.querySelector("main p");
+const descriptions = document.querySelectorAll("p.description");
+const notOnMaps = document.getElementById("not-on-maps");
 const formatChoice = document.querySelector("main select");
 const scrapeLocations = document.getElementById("scrape-locations");
 const typeOfBusiness = document.getElementById("business-type");
+const progressBar = document.getElementById("progress-bar");
 
 
 let currentTab;
 chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
     currentTab = tabs[0];
     if (!currentTab.url.includes("google.com/maps")) {
-        description.innerHTML = "Only works while on <a href='https://www.google.com/maps' target='_blank'>Google Maps</a>";
+        for (let i = 0; i < descriptions.length; i++) {
+            descriptions[i].hidden = true;
+        }
         runButton.hidden = true;
         formatChoice.hidden = true;
         scrapeLocations.hidden = true;
         typeOfBusiness.hidden = true;
+        progressBar.hidden = true;
+        notOnMaps.hidden = false;
     }
 })
 
@@ -21,28 +27,45 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 runButton.addEventListener('click', async function() {
     // Get the data from the extension inputs
     const searchStrings = getSearchStrings();
+    // Setup progress bar
+    // progressBar.hidden = false;
+    let progressVal = 0;
+    const progressStep = 100 / Math.max(1, searchStrings.length);
+
     let data = [["name", "type", "rating", "address", "phone", "website"]];
-    const rawData = [];
     for (searchStr of searchStrings) {
         const newUrl = createUrl(searchStr);
+        let newData = await getLocationListings(newUrl);
+        data.push(...newData);
 
-        await chrome.tabs.update(currentTab.id, {url: newUrl});
-        // Wait for the page load
-        await new Promise(resolve => setTimeout(resolve, 5000));
-
-        await chrome.scripting.executeScript({
-            target: {tabId: currentTab.id},
-            function: scrollListings
-        });
-        let locData = await chrome.scripting.executeScript({
-            target: {tabId: currentTab.id},
-            function: scrapeListings
-        });
-        rawData.push(locData);
-        data.push(...locData[0].result)
+        progressVal += progressStep;
+        updateProgress(progressVal);
+    }
+    // Search current google maps view if the inputs are empty 
+    if (searchStrings.length === 0) {
+        let newData = await getLocationListings();
+        data.push(...newData);
     }
     processData(data)
 });
+
+
+async function getLocationListings(mapsUrl) {
+    if (mapsUrl) {
+        await chrome.tabs.update(currentTab.id, {url: mapsUrl});
+        // Wait for the page to load
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+    await chrome.scripting.executeScript({
+        target: {tabId: currentTab.id},
+        function: scrollListings
+    });
+    let locData = await chrome.scripting.executeScript({
+        target: {tabId: currentTab.id},
+        function: scrapeListings
+    });
+    return locData[0].result; 
+}
 
 
 async function scrollListings() {
@@ -52,12 +75,12 @@ async function scrollListings() {
     const el = document.querySelector(resultsSelector);
     const scrollDistance = el.scrollHeight;
     for (let i = 0; i < 20; i++) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
         if (el.scrollTop !== (el.scrollHeight - el.offsetHeight)) {
             el.scrollBy(0, scrollDistance);
         } else {
             break;
         }
+        await new Promise(resolve => setTimeout(resolve, 2000));
     }
 }
 
@@ -98,7 +121,6 @@ function scrapeListings() {
 function parseCsv(data) {
     console.log("Parsing csv.");
     console.log("For data", data);
-
     // Removing some chars to get a valid csv
     const cleanStr = (str) => {
         if (!str) {
@@ -107,7 +129,6 @@ function parseCsv(data) {
         const r = [",", "/", "|"];
         return str.split('').map(char => r.includes(char) ? ' ' : char).join('');
     }
-
     // Clean names and addresses
     for (let i = 0; i < data.length; i++) {
         data[i][0] = cleanStr(data[i][0]);
@@ -150,11 +171,14 @@ function processData(data) {
 }
 
 function getSearchStrings() {
-    const locations = scrapeLocations.value.split(",");
-    const bType = typeOfBusiness.value;
-    const searchStrings = [];
-    for (loc of locations) {
-        searchStrings.push(`${bType} in ${loc.trim()}`);
+    const locationValues = scrapeLocations.value;
+    let searchStrings = [];
+    if (locationValues) {
+        const locations = scrapeLocations.value.split(",");
+        const bType = typeOfBusiness.value;
+        for (loc of locations) {
+            searchStrings.push(`${bType} in ${loc.trim()}`);
+        }
     }
     return searchStrings;
 }
@@ -172,8 +196,14 @@ async function runSearch(searchStr) {
     await new Promise(resolve => setTimeout(resolve, 2000));
 }
 
+
 function createUrl(searchStr) {
     const words = searchStr.split(" ").join("+")
     return `https://www.google.com/maps/search/${words}`
+}
+
+
+function updateProgress(val) {
+    progressBar.style.width += val;
 }
 

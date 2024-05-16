@@ -9,25 +9,38 @@
         <h1>Google Maps Scraper</h1> 
 
         <main>
-            <p>
-                Enter a type of business to be scraped.
-                <br><br>
-                Write comma separated list of locations (London, Paris, Berlin). 
-                <br><br>
-                Choose a data format. csv will be downloaded and markdown will be displayed in a new tab. 
-                <br><br>
-                Press Run to get the data. Locations will be searched and lists will be scrolled automatically. It should take 20-40 seconds per location.
-                Scrolling is capped at 40 seconds or until we reach the bottom.
-            </p>
-            <input id="business-type" type="text" name="business-type" value="" placeholder="Type of business">
-            <input id="scrape-locations" type="text" name="scrape-locations" value="" placeholder="List of locations">
-            <select>
-                <option value="csv">csv</option>
-                <option value="markdown">Markdown</option>
-            </select>
 
-            <button id="runbutton" type="button">Run</button>
+            <p id="not-on-maps" hidden>Only works while on <a href='https://www.google.com/maps' target='_blank'>Google Maps</a></p>
+
+            <p class="description">
+                Enter a type of business to be scraped. <br>
+                <input id="business-type" type="text" name="business-type" value="" placeholder="Type of business">
+            </p>
+
+            <p class="description">
+                Write comma separated list of locations (London, Paris, Sydney Canada,...).<br>
+                <input id="scrape-locations" type="text" name="scrape-locations" value="" placeholder="List of locations">
+            </p>
+
+            <p class="description">
+                Choose a data format. csv will be downloaded and markdown will be displayed in a new tab. <br>
+                <select>
+                    <option value="csv">csv</option>
+                    <option value="markdown">Markdown</option>
+                </select>
+            </p>
+
+            <p class="description">
+                Press Run to get the data. Locations will be searched and lists will be scrolled automatically. It should take 20-40 seconds per location.
+                Scrolling is capped at 40 seconds or until we reach the bottom.<br><br>
+                <button id="runbutton" type="button">Run</button>
+            </p>
+
         </main>
+
+        <div id="progress">
+            <div id="progress-bar" hidden></div>
+        </div>
 
         <div id="attributions">
             <a href="https://www.vecteezy.com/free-photos/public-domain">Background by Vecteezy</a>
