@@ -1,5 +1,5 @@
 const runButton = document.getElementById("runbutton");
-const descriptions = document.querySelectorAll("p.description");
+const descriptions = document.querySelectorAll(".description");
 const notOnMaps = document.getElementById("not-on-maps");
 const formatChoice = document.querySelector("main select");
 const scrapeLocations = document.getElementById("scrape-locations");
@@ -174,12 +174,13 @@ function getSearchStrings() {
     const locationValues = scrapeLocations.value;
     let searchStrings = [];
     if (locationValues) {
-        const locations = scrapeLocations.value.split(",");
+        const locations = scrapeLocations.value.split("\n");
         const bType = typeOfBusiness.value;
         for (loc of locations) {
-            searchStrings.push(`${bType} in ${loc.trim()}`);
+            let sString = bType.length > 0 ? `${bType} in ${loc.trim()}` : loc.trim();
+            searchStrings.push(sString);
         }
-    }
+    
     return searchStrings;
 }
 

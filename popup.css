@@ -1,37 +1,56 @@
 body {
     font-family: "Roboto", sans-serif;
-    font-size: 0.8rem; 
+    font-size: 1rem; 
+    color: #F8F8F2;
     min-width: 400px;
-    background-image: url("images/background.jpg");
-    background-size: cover;
+    /* background-color: #282A36; */
+    background-image: url("images/map_lights_dracula.jpg");
+    background-position: center;
 }
 
 h1 {
-    font-size: 1.4rem;
+    font-size: 2rem;
 }
+
+header {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px 10px;
+}
+
+header div h1 {
+    padding-top: 5%;
+}
+
 
 main {
     display: flex;
     flex-direction: column;
     row-gap: 5px;
+    padding: 10px 10px;
 }
 
 #scrape-locations {
     width: 70%;
     height: 100px;
-    text-align: left;
     padding: 10px;
 }
 
-
 #business-type {
     width: 40%;
+    height: 20px;
+    padding: 0 10px;
+}
+
+::placeholder {
+    color: #F8F8F2;
 }
 
 .input-style {
     border: 1px solid #ccc;
+    color: #F8F8F2;
     border-radius: 4px;
-    background-color: #fff000;
+    background-color: #6272A4;
 }
 
 .input-style:hover {
@@ -53,15 +72,22 @@ select option {
 }
 
 select option:checked {
-    background-color: orange; 
+    background-color: #44475A; 
 }
 
+a:link {
+    color: #FF79C6;
+}
+
+a:visited {
+    color: #FF79C6;
+}
 
 #runbutton {
-    background-color: #fff000;
-    border-style: 2px solid;
+    background-color: #F1FA8C;
+    border-style: 2px solid #ccc;
     border-radius: 12px;
-    color: #000;
+    /* color: #000; */
     cursor: pointer;
     font-weight: bold;
     padding: 10px 30px;
@@ -80,7 +106,7 @@ select option:checked {
 #runbutton:not(:disabled):hover,
 .button-32:not(:disabled):focus {
     outline: 0;
-    background: #f4e603;
+    background: #8BE9FD;
     box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
 }
 
