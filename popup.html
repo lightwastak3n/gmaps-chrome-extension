@@ -14,17 +14,18 @@
 
             <p class="description">
                 Enter a type of business to be scraped. <br>
-                <input id="business-type" type="text" name="business-type" value="" placeholder="Type of business">
+                <input id="business-type" class="input-style" type="text" name="business-type" value="" placeholder="Type of business">
             </p>
 
             <p class="description">
                 Write comma separated list of locations (London, Paris, Sydney Canada,...).<br>
-                <input id="scrape-locations" type="text" name="scrape-locations" value="" placeholder="List of locations">
+                <textarea id="scrape-locations" class="input-style" rows="" cols=""></textarea>
+                <!-- <textar id="scrape-locations" class="input-style" type="text" name="scrape-locations" value="" placeholder="List of locations"> -->
             </p>
 
             <p class="description">
                 Choose a data format. csv will be downloaded and markdown will be displayed in a new tab. <br>
-                <select>
+                <select class="input-style">
                     <option value="csv">csv</option>
                     <option value="markdown">Markdown</option>
                 </select>
@@ -33,7 +34,10 @@
             <p class="description">
                 Press Run to get the data. Locations will be searched and lists will be scrolled automatically. It should take 20-40 seconds per location.
                 Scrolling is capped at 40 seconds or until we reach the bottom.<br><br>
-                <button id="runbutton" type="button">Run</button>
+                <button id="runbutton" type="button">
+                    <img src="/images/play.png" alt="">
+                    <span>Run</span>
+                </button>
             </p>
 
         </main>

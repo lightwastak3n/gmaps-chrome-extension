@@ -16,17 +16,46 @@ main {
     row-gap: 5px;
 }
 
-main select {
-    width: 20%;
+#scrape-locations {
+    width: 70%;
+    height: 100px;
+    text-align: left;
+    padding: 10px;
 }
 
-#scrape-locations {
-    width: 50%;
-}
 
 #business-type {
     width: 40%;
 }
+
+.input-style {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff000;
+}
+
+.input-style:hover {
+    border-color: red;
+}
+
+.input-style:focus {
+    border: 2px solid red;
+}
+
+select {
+    padding: 8px 2px;
+    text-align: left;
+    width: 25%; 
+}
+
+select option {
+    padding: 10px 10px;
+}
+
+select option:checked {
+    background-color: orange; 
+}
+
 
 #runbutton {
     background-color: #fff000;
@@ -35,15 +64,17 @@ main select {
     color: #000;
     cursor: pointer;
     font-weight: bold;
-    padding: 10px 15px;
+    padding: 10px 30px;
     text-align: center;
     transition: 200ms;
-    width: 40%;
+    width: 30%;
     box-sizing: border-box;
     font-size: 16px;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    display: flex;
+    justify-content: space-evenly;
 }
 
 #runbutton:not(:disabled):hover,
