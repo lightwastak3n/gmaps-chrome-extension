@@ -1,13 +1,13 @@
 const runButton = document.getElementById("runbutton");
 const descriptions = document.querySelectorAll(".description");
 const notOnMaps = document.getElementById("not-on-maps");
-const formatChoice = document.querySelector("main select");
+const formatChoice = document.getElementById("data-format");
 const scrapeLocations = document.getElementById("scrape-locations");
 const typeOfBusiness = document.getElementById("business-type");
 const leadsStatus = document.getElementById("leads-num");
 const bottomSection = document.getElementById("bottom");
 const currentTask = document.getElementById("current-task");
-
+const scrollingChoice = document.getElementById("scrolling-time")
 
 
 let currentTab;
@@ -31,31 +31,33 @@ runButton.addEventListener('click', async function() {
     const searchStrings = getSearchStrings();
     // Setup progress bar
     bottomSection.hidden = false;
-    let progressVal = 0;
     let leadsTotal = 0;
-    const progressStep = 100 / Math.max(1, searchStrings.length);
+
+    const scrollTime = scrollingChoice.value;
 
     let data = [["name", "type", "rating", "address", "phone", "website"]];
+    const totalTasks = searchStrings.length;
+    let taskNum = 1;
     for (const searchStr of searchStrings) {
-        updateTask(searchStr);
+        updateTask(`${taskNum}/${totalTasks} ${searchStr}`);
         const newUrl = createUrl(searchStr);
-        let newData = await getLocationListings(newUrl);
+        let newData = await getLocationListings(newUrl, scrollTime);
         data.push(...newData);
 
-        progressVal += progressStep;
         leadsTotal += newData.length;
         updateLeads(leadsTotal);
+        taskNum++;
     }
     // Search current google maps view if the inputs are empty 
     if (searchStrings.length === 0) {
-        let newData = await getLocationListings();
+        let newData = await getLocationListings(undefined, scrollTime);
         data.push(...newData);
     }
     processData(data)
 });
 
 
-async function getLocationListings(mapsUrl) {
+async function getLocationListings(mapsUrl, scrollTime) {
     if (mapsUrl) {
         await chrome.tabs.update(currentTab.id, {url: mapsUrl});
         // Wait for the page to load
@@ -63,7 +65,8 @@ async function getLocationListings(mapsUrl) {
     }
     await chrome.scripting.executeScript({
         target: {tabId: currentTab.id},
-        function: scrollListings
+        function: scrollListings,
+        args: [scrollTime]
     });
     let locData = await chrome.scripting.executeScript({
         target: {tabId: currentTab.id},
@@ -73,13 +76,17 @@ async function getLocationListings(mapsUrl) {
 }
 
 
-async function scrollListings() {
-    const resultsSelector = "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc" + 
-        " > div > div.e07Vkf.kA9KIf > div > div > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd" + 
-        " > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd";
-    const el = document.querySelector(resultsSelector);
+async function scrollListings(scrollTime) {
+    // const resultsSelector = "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc" + 
+    //     " > div > div.e07Vkf.kA9KIf > div > div > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd" + 
+    //     " > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd";
+    // const el = document.querySelector(resultsSelector);
+    
+    // Use ARIA to select
+    const el = document.querySelector("div[role='feed']");
     const scrollDistance = el.scrollHeight;
-    for (let i = 0; i < 20; i++) {
+    const turns = scrollTime / 2;
+    for (let i = 0; i < turns; i++) {
         if (el.scrollTop !== (el.scrollHeight - el.offsetHeight)) {
             el.scrollBy(0, scrollDistance);
         } else {

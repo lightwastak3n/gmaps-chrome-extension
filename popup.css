@@ -25,7 +25,7 @@ header div h1 {
 main {
     display: flex;
     flex-direction: column;
-    row-gap: 5px;
+    row-gap: 15px;
     padding: 10px 10px;
 }
 
@@ -43,6 +43,7 @@ main {
 
 ::placeholder {
     color: #F8F8F2;
+    font-family: "Roboto", sans-serif;
 }
 
 .input-style {
@@ -53,11 +54,11 @@ main {
 }
 
 .input-style:hover {
-    border-color: red;
+    border: 1px solid red;
 }
 
 .input-style:focus {
-    border: 2px solid red;
+    border: 3px solid red;
 }
 
 select {

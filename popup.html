@@ -22,15 +22,26 @@
             </div>
 
             <div class="description">
-                <textarea id="scrape-locations" class="input-style" rows="" cols="" placeholder="Pizza in London&#10;Car repair in Berlin"></textarea>
+                <textarea id="scrape-locations" class="input-style" rows="" cols="" placeholder="Pizza in London&#10;Car repair in Berlin&#10;dentist in las vegas"></textarea>
             </div>
 
             <div class="description">
                 <select id="data-format" class="input-style">
-                    <option value="csv">csv</option>
+                    <option value="csv" selected>csv</option>
                     <option value="markdown">Markdown</option>
                 </select>
                 <label for="data-format">Choose data format.</label>
+            </div>
+
+            <div class="description">
+                <select id="scrolling-time" class="input-style">
+                    <option value="20">20s</option>
+                    <option value="40" selected>40s</option>
+                    <option value="60">60s</option>
+                    <option value="80">80s</option>
+                    <option value="120">120s</option>
+                </select>
+                <label for="data-format">How long to scroll each listing</label>
             </div>
 
             <div class="description">
