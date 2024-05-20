@@ -1,5 +1,5 @@
 const runButton = document.getElementById("runbutton");
-const descriptions = document.querySelectorAll(".description");
+const options = document.querySelectorAll(".option");
 const notOnMaps = document.getElementById("not-on-maps");
 const formatChoice = document.getElementById("data-format");
 const scrapeLocations = document.getElementById("scrape-locations");
@@ -7,21 +7,22 @@ const typeOfBusiness = document.getElementById("business-type");
 const leadsStatus = document.getElementById("leads-num");
 const bottomSection = document.getElementById("bottom");
 const currentTask = document.getElementById("current-task");
-const scrollingChoice = document.getElementById("scrolling-time")
-const trialOver = document.getElementById("trial-over")
+const scrollingChoice = document.getElementById("scrolling-time");
+const trialOver = document.getElementById("trial-over");
+
+
+function hideElements(arr) {
+    for (const el of arr) {
+        el.hidden = true;
+    }
+}
 
 
 let currentTab;
 chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
     currentTab = tabs[0];
     if (!currentTab.url.includes("google.com/maps")) {
-        for (let i = 0; i < descriptions.length; i++) {
-            descriptions[i].hidden = true;
-        }
-        runButton.hidden = true;
-        formatChoice.hidden = true;
-        scrapeLocations.hidden = true;
-        typeOfBusiness.hidden = true;
+        hideElements(options);
         notOnMaps.hidden = false;
     }
 })
@@ -31,10 +32,10 @@ runButton.addEventListener('click', async function() {
     // Check if trial is over
     const currentUsage = await chrome.storage.local.get("usageCount"); 
     if (currentUsage.usageCount > 5) {
+        hideElements(options);
         trialOver.hidden = false;
         return;
     };
-
 
     // Get the data from the extension inputs
     const searchStrings = getSearchStrings();
@@ -142,50 +143,6 @@ function scrapeListings() {
 }
 
 
-function parseCsv(data) {
-    console.log("Parsing csv.");
-    console.log("For data", data);
-    // Removing some chars to get a valid csv
-    const cleanStr = (str) => {
-        if (!str) {
-            return "";
-        }
-        const r = [",", "/", "|"];
-        return str.split('').map(char => r.includes(char) ? ' ' : char).join('');
-    }
-    // Clean names and addresses
-    for (let i = 0; i < data.length; i++) {
-        data[i][0] = cleanStr(data[i][0]);
-        data[i][3] = cleanStr(data[i][3]);
-    }
-    let csvData = data.map(row => row.join(",")).join("\n");
-    let csvFile = new Blob([csvData], {type: "text/csv;charset=utf-8;"});
-    let csvUrl = URL.createObjectURL(csvFile);
-
-    let csvLink = document.createElement("a");
-    csvLink.href = csvUrl;
-    csvLink.download = "google_maps.csv";
-    csvLink.click();
-}
-
-
-function parseMarkdown(data) {
-    console.log("Parsing Markdown.");
-    let markdownTable = "";
-    for (let i = 0; i < data.length; i++) {
-        let row = data[i];
-        markdownTable += "| ";
-        markdownTable += row.join(" | ") + " |\n";
-        if (i === 0) {
-            markdownTable += "| ";
-            markdownTable += row.map(() => "----").join(" | ") + " |\n";
-        }
-    }
-    // Open the Markdown table in a new tab
-    chrome.tabs.create({ url: "data:text/plain;charset=utf-8," + encodeURIComponent(markdownTable) });
-}
-
-
 function processData(data) {
     if (formatChoice.value === "csv") {
         parseCsv(data);
@@ -193,6 +150,7 @@ function processData(data) {
         parseMarkdown(data);
     }
 }
+
 
 function getSearchStrings() {
     const locationValues = scrapeLocations.value;

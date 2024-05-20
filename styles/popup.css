@@ -21,6 +21,15 @@ header div h1 {
     padding-top: 5%;
 }
 
+#trial-over {
+    background-color: #6272A4;
+    color: #FF5555;
+    padding: 5px;
+    border-style: 2px solid #FF5555;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
 
 main {
     display: flex;
@@ -54,11 +63,11 @@ main {
 }
 
 .input-style:hover {
-    border: 1px solid red;
+    border: 1px solid #FF5555;
 }
 
 .input-style:focus {
-    border: 3px solid red;
+    border: 3px solid #FF5555;
 }
 
 select {

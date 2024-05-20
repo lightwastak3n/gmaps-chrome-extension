@@ -13,20 +13,20 @@
             <img src="images/128.png" alt=""> 
         </header>
 
+        <p id="not-on-maps" hidden>Only works while on <a href='https://www.google.com/maps' target='_blank'>Google Maps</a></p>
+        <p id="trial-over">Trial version. Uses left <span id="uses">5</span>.</p>
+
         <main>
 
-            <p id="not-on-maps" hidden>Only works while on <a href='https://www.google.com/maps' target='_blank'>Google Maps</a></p>
-            <p id="trial-over" hidden><a href='https://www.google.com/maps' target='_blank'>Please buy a full version</a></p>
-
-            <div class="description">
+            <div class="option">
                 <input id="business-type" class="input-style" type="text" name="business-type" value="" placeholder="Type of business">
             </div>
 
-            <div class="description">
+            <div class="option">
                 <textarea id="scrape-locations" class="input-style" rows="" cols="" placeholder="Pizza in London&#10;Car repair in Berlin&#10;dentist in las vegas"></textarea>
             </div>
 
-            <div class="description">
+            <div class="option">
                 <select id="data-format" class="input-style">
                     <option value="csv" selected>csv</option>
                     <option value="markdown">Markdown</option>
@@ -34,7 +34,7 @@
                 <label for="data-format">Choose data format.</label>
             </div>
 
-            <div class="description">
+            <div class="option">
                 <select id="scrolling-time" class="input-style">
                     <option value="20">20s</option>
                     <option value="40" selected>40s</option>
@@ -45,7 +45,7 @@
                 <label for="data-format">How long to scroll each listing</label>
             </div>
 
-            <div class="description">
+            <div class="option">
                 <button id="runbutton" type="button">
                     <img src="/images/play.png" alt="">
                     <span>Run</span>
@@ -71,6 +71,7 @@
             <a href="https://www.flaticon.com/free-icons/location" title="location icons" target="_blank">Icon by Freepik - Flaticon</a>
         </div>
 
+    <script type="text/javascript" src="scripts/dataParser.js"></script>
     <script type="text/javascript" src="popup.js"></script>
     </body>
 </html>
