@@ -1,9 +1,23 @@
+:root {
+    --background: #282a36;
+    --current-line: #44475a;
+    --foreground: #f8f8f2;
+    --comment: #6272a4;
+    --cyan: #8be9fd;
+    --green: #50fa7b;
+    --orange: #ffb86c;
+    --pink: #ff79c6;
+    --purple: #bd93f9;
+    --red: #ff5555;
+    --yellow: #f1fa8c;
+}
+
 body {
     font-family: "Roboto", sans-serif;
     font-size: 1rem; 
-    color: #F8F8F2;
+    color: var(--foreground);
     min-width: 400px;
-    background-image: url("images/map_lights_dracula.jpg");
+    background-image: url("../images/map_lights_dracula.jpg");
     background-position: center;
 }
 
@@ -22,10 +36,10 @@ header div h1 {
 }
 
 #trial-over {
-    background-color: #6272A4;
-    color: #FF5555;
+    background-color: var(--comment);
+    color: var(--red);
     padding: 5px;
-    border-style: 2px solid #FF5555;
+    border-style: 2px solid var(--red);
     border-radius: 10px;
     font-weight: bold;
 }
@@ -51,23 +65,23 @@ main {
 }
 
 ::placeholder {
-    color: #F8F8F2;
+    color: var(--foreground);
     font-family: "Roboto", sans-serif;
 }
 
 .input-style {
-    border: 1px solid #ccc;
-    color: #F8F8F2;
+    border: 1px solid var(--yellow);
+    color: var(--foreground);
     border-radius: 4px;
-    background-color: #6272A4;
+    background-color: var(--comment);
 }
 
 .input-style:hover {
-    border: 1px solid #FF5555;
+    border: 1px solid var(--red);
 }
 
 .input-style:focus {
-    border: 3px solid #FF5555;
+    border: 3px solid var(--red);
 }
 
 select {
@@ -81,20 +95,20 @@ select option {
 }
 
 select option:checked {
-    background-color: #44475A; 
+    background-color: var(--current-line); 
 }
 
 a:link {
-    color: #FF79C6;
+    color: var(--pink);
 }
 
 a:visited {
-    color: #FF79C6;
+    color: var(--pink);
 }
 
 #runbutton {
-    background-color: #F1FA8C;
-    border-style: 2px solid #ccc;
+    background-color: var(--yellow);
+    border-style: 2px solid var(--yellow);
     border-radius: 12px;
     cursor: pointer;
     font-weight: bold;
@@ -109,12 +123,13 @@ a:visited {
     touch-action: manipulation;
     display: flex;
     justify-content: space-evenly;
+    gap: 5px;
 }
 
 #runbutton:not(:disabled):hover,
 .button-32:not(:disabled):focus {
     outline: 0;
-    background: #8BE9FD;
+    background: var(--cyan);
     box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
 }
 
@@ -124,9 +139,48 @@ a:visited {
     cursor: not-allowed;
 }
 
+#options-button {
+    background-color: var(--purple);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    padding: 10px 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+#options-button:hover {
+    background-color: var(--pink);
+}
+
+#options-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--cyan);
+}
+
+#options-button:active {
+    background-color: var(--cyan);
+}
+
 #bottom {
     width: 100%;
     padding: 0 10%;
+}
+
+#buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#buttons a {
+    width: 50%;
+    text-decoration: none;
+    display: flex;
+    justify-content: end;
 }
 
 #progress-section {
@@ -134,14 +188,14 @@ a:visited {
     height: 35px;
     padding: 5px 5px;
     border-radius: 20px;
-    background-color: #44475A;
+    background-color: var(--current-line);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 #leads-num {
-    color: #FF5555;
+    color: var(--red);
 }
 
 #instructions {

@@ -1,5 +1,4 @@
 const runButton = document.getElementById("runbutton");
-const options = document.querySelectorAll(".option");
 const notOnMaps = document.getElementById("not-on-maps");
 const formatChoice = document.getElementById("data-format");
 const scrapeLocations = document.getElementById("scrape-locations");
@@ -9,6 +8,7 @@ const bottomSection = document.getElementById("bottom");
 const currentTask = document.getElementById("current-task");
 const scrollingChoice = document.getElementById("scrolling-time");
 const trialOver = document.getElementById("trial-over");
+const mainSection = document.querySelector("main");
 
 
 function hideElements(arr) {
@@ -22,7 +22,7 @@ let currentTab;
 chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
     currentTab = tabs[0];
     if (!currentTab.url.includes("google.com/maps")) {
-        hideElements(options);
+        mainSection.style.display = "none";
         notOnMaps.hidden = false;
     }
 })
@@ -32,7 +32,7 @@ runButton.addEventListener('click', async function() {
     // Check if trial is over
     const currentUsage = await chrome.storage.local.get("usageCount"); 
     if (currentUsage.usageCount > 5) {
-        hideElements(options);
+        mainSection.style.display = "none";
         trialOver.hidden = false;
         return;
     };

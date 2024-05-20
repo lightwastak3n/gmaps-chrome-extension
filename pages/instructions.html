@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="instructions.css">
+    <link rel="stylesheet" href="../styles/instructions.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -12,6 +12,9 @@
 <body>
     <div class="container">
         <h1>Google maps scraper</h1>
+        <p>
+        During the scraping don't change tabs and don't close the extension otherwise the scraping will stop.
+        </p>
         <p>
             For each scan method you can choose a format: csv or Markdown, scroll duration 20-120 seconds. The default is 40 seconds which means extension will scroll
             each location given for 40 seconds or until it reaches bottom.
@@ -33,12 +36,23 @@
         <p>Press <strong>Run</strong>. The extension will scan same business type across all regions one by one and give you all the data as a single csv or markdown table.</p>
         
         <h2>Find different businesses in different regions</h2>
-        <p>Don't type anything into a "type of business" field, type search terms into regions input field with one search per line. For example:</p>
+        <p>Don't type anything into a "type of business" field, type search terms into regions input field with one search per line and press <strong>Run</strong>. For example:</p>
         <blockquote>
             <p>dentist in Paris<br>
             plumber in Las Vegas<br>
             lawyer in Berlin</p>
         </blockquote>
+        <h1>Settings</h1>
+
+        <h2>Search method</h2>
+        <p>Search using url - this will refresh the page, and in testing on some systems, this will close the extension and kill the scraping.</p>
+        <p>Search using search button (default) - this doesn't cause any issues but might give worse results, since Google Maps sometimes doesn't change view when using this search. </p>
+
+        <h2>Niche</h2>
+        <p>Create a set group of niches which you can use for searching.</p>
+
+        <h2>Cities</h2>
+        <p>Create a set group of locations which you can use for searching.</p>
     </div>
 </body>
 </html>

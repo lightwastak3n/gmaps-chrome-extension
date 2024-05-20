@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="options.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <title>Options</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../styles/options.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+        <title>Options</title>
+    </head>
+    <body>
     <div class="container">
-        <label for="niche">Niche</label>`
-        <input type="text" id="niche" class="input-field" placeholder=" ">
+        <label for="search-method">Choose a search method</label>
+        <select id="search-method">
+           <option value="url">Search using url</option> 
+           <option value="search-button">Search using search button</option> 
+        </select>
+            
+        <label for="niche">Niche</label>
+        <textarea id="niche" class="textarea-field" placeholder="dentist, plumber, lawyer"></textarea>
+            
         <label for="cities">Cities</label>
-        <textarea id="cities" class="textarea-field" placeholder=" "></textarea>
+        <textarea id="cities" class="textarea-field" placeholder="New York City, Paris, Berlin, Lagos, London Ohio"></textarea>
         <button class="button">Save</button>
     </div>
-</body>
+    <script type="text/javascript" src="scripts/storage.js"></script>
+    <script type="text/javascript" src="scripts/options.js"></script>
+    </body>
 </html>
