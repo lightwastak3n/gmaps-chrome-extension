@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="instructions.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>Instructions</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Google maps scraper</h1>
+        <p>
+            For each scan method you can choose a format: csv or Markdown, scroll duration 20-120 seconds. The default is 40 seconds which means extension will scroll
+            each location given for 40 seconds or until it reaches bottom.
+        </p>
+        <p>
+            All the data scraped is public data. The extension scrapes visible data, so if the business's website isn't visible, it will not be scraped. 
+            The data scraped includes the name, type of business, rating, address, phone, website. 
+        </p>
+        <h2>Scan current region</h2>
+        <p>Zoom to the region of interest, do your search, choose format and time, and press <strong>Run</strong>. Extension will scroll for some time and give you the data for that region.</p>
+        
+        <h2>Find same business in multiple regions</h2>
+        <p>Type the name of the business in the input field, type the regions in the text box below with one region per line like this:</p>
+        <blockquote>
+            <p>madrid<br>
+            warsaw<br>
+            brent london</p>
+        </blockquote>
+        <p>Press <strong>Run</strong>. The extension will scan same business type across all regions one by one and give you all the data as a single csv or markdown table.</p>
+        
+        <h2>Find different businesses in different regions</h2>
+        <p>Don't type anything into a "type of business" field, type search terms into regions input field with one search per line. For example:</p>
+        <blockquote>
+            <p>dentist in Paris<br>
+            plumber in Las Vegas<br>
+            lawyer in Berlin</p>
+        </blockquote>
+    </div>
+</body>
+</html>

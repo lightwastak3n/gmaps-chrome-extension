@@ -8,6 +8,7 @@ const leadsStatus = document.getElementById("leads-num");
 const bottomSection = document.getElementById("bottom");
 const currentTask = document.getElementById("current-task");
 const scrollingChoice = document.getElementById("scrolling-time")
+const trialOver = document.getElementById("trial-over")
 
 
 let currentTab;
@@ -27,12 +28,19 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 
 
 runButton.addEventListener('click', async function() {
+    // Check if trial is over
+    const currentUsage = await chrome.storage.local.get("usageCount"); 
+    if (currentUsage.usageCount > 5) {
+        trialOver.hidden = false;
+        return;
+    };
+
+
     // Get the data from the extension inputs
     const searchStrings = getSearchStrings();
     // Setup progress bar
     bottomSection.hidden = false;
     let leadsTotal = 0;
-
     const scrollTime = scrollingChoice.value;
 
     let data = [["name", "type", "rating", "address", "phone", "website"]];
@@ -40,8 +48,7 @@ runButton.addEventListener('click', async function() {
     let taskNum = 1;
     for (const searchStr of searchStrings) {
         updateTask(`${taskNum}/${totalTasks} ${searchStr}`);
-        const newUrl = createUrl(searchStr);
-        let newData = await getLocationListings(newUrl, scrollTime);
+        let newData = await getLocationListings(searchStr, scrollTime, "search");
         data.push(...newData);
 
         leadsTotal += newData.length;
@@ -53,15 +60,23 @@ runButton.addEventListener('click', async function() {
         let newData = await getLocationListings(undefined, scrollTime);
         data.push(...newData);
     }
+    await updateUsageCount();
     processData(data)
 });
 
 
-async function getLocationListings(mapsUrl, scrollTime) {
-    if (mapsUrl) {
+async function getLocationListings(searchStr, scrollTime, method) {
+    if (method === "url") {
+        const mapsUrl = createUrl(searchStr);
         await chrome.tabs.update(currentTab.id, {url: mapsUrl});
         // Wait for the page to load
         await new Promise(resolve => setTimeout(resolve, 3000));
+    } else if (method === "search") {
+        await chrome.scripting.executeScript({
+            target: {tabId: currentTab.id},
+            function: runSearch,
+            args: [searchStr]
+        })
     }
     await chrome.scripting.executeScript({
         target: {tabId: currentTab.id},
@@ -77,12 +92,7 @@ async function getLocationListings(mapsUrl, scrollTime) {
 
 
 async function scrollListings(scrollTime) {
-    // const resultsSelector = "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc" + 
-    //     " > div > div.e07Vkf.kA9KIf > div > div > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd" + 
-    //     " > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd";
-    // const el = document.querySelector(resultsSelector);
-    
-    // Use ARIA to select
+    // Use ARIA to select results div
     const el = document.querySelector("div[role='feed']");
     const scrollDistance = el.scrollHeight;
     const turns = scrollTime / 2;
@@ -93,7 +103,7 @@ async function scrollListings(scrollTime) {
             break;
         }
         // Wait for the new results to load
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 }
 
@@ -121,7 +131,8 @@ function scrapeListings() {
         const link = links[i];
         const mainData = link.innerText.split("\n");
         const businessName = mainData[0];
-        const rating = mainData[1].includes("reviews") ? "No reviews" : mainData[1].split("(")[0];
+        let rating = mainData[1].includes("reviews") ? "No reviews" : mainData[1].split("(")[0];
+        rating = rating.replace(",", ".");
         const [businessType, address] = mainData[2].split(" · ");
         const phoneNumber = findPhoneNumber(mainData[3]);
         const website = findLink(link.innerHTML);
@@ -200,14 +211,12 @@ function getSearchStrings() {
 
 async function runSearch(searchStr) {
     // Switched from this to directly changing url
-    const searchId = "searchboxinput";
-    const searchBox = document.getElementById(searchId);
+    const searchBox = document.getElementById('searchboxinput');
     searchBox.value = searchStr;
-    const buttonId = "searchbox-searchbutton";
-    const searchButton = document.getElementById(buttonId);
+    const searchButton = document.getElementById("searchbox-searchbutton");
     searchButton.click();
     // Wait for result load before returning
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 4000));
 }
 
 
@@ -226,3 +235,12 @@ function updateTask(val) {
     currentTask.innerText = val;
 }
 
+
+async function updateUsageCount() {
+    let currentCount = await chrome.storage.local.get("usageCount");
+    let totalCount = 1;
+    if (currentCount.usageCount) {
+        totalCount += currentCount.usageCount;
+    }
+    await chrome.storage.local.set({"usageCount": totalCount});
+}
