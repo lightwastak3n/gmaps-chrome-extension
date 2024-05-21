@@ -44,12 +44,16 @@ runButton.addEventListener('click', async function() {
     let leadsTotal = 0;
     const scrollTime = scrollingChoice.value;
 
-    let data = [["name", "type", "rating", "address", "phone", "website"]];
+    let data = [["name", "type", "rating", "address", "phone", "website", "place"]];
     const totalTasks = searchStrings.length;
     let taskNum = 1;
     for (const searchStr of searchStrings) {
         updateTask(`${taskNum}/${totalTasks} ${searchStr}`);
         let newData = await getLocationListings(searchStr, scrollTime, "search");
+        const place = searchStr.split(" in ")[1];
+        for (let i = 0; i < newData.length; i++) {
+            newData[i].push(place);
+        }
         data.push(...newData);
 
         leadsTotal += newData.length;
