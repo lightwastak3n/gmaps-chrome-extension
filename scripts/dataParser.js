@@ -40,3 +40,10 @@ function parseMarkdown(data) {
     // Open the Markdown table in a new tab
     chrome.tabs.create({ url: "data:text/plain;charset=utf-8," + encodeURIComponent(markdownTable) });
 }
+
+
+function capitalizeEachWord(text) {
+    return text.split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+}
