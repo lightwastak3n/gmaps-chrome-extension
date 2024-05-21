@@ -87,3 +87,8 @@ body {
 #search-method option:checked {
     background-color: var(--purple); 
 }
+
+footer a{
+    color: var(--green);
+    text-decoration: none;
+}
