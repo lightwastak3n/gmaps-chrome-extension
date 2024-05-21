@@ -9,6 +9,29 @@ const currentTask = document.getElementById("current-task");
 const scrollingChoice = document.getElementById("scrolling-time");
 const trialOver = document.getElementById("trial-over");
 const mainSection = document.querySelector("main");
+const nichesList = document.getElementById("niche-list");
+const locationsList = document.getElementById("locations-list");
+
+
+// Populate niches
+getSavedOption("niches").then((storedNichesList) => {
+    storedNichesList.forEach(niche => {
+        const option = document.createElement("option");
+        option.value = niche;
+        nichesList.appendChild(option);
+    });
+})
+
+// Populate cities
+getSavedOption("cities").then((storedCitiesLists) => {
+    storedCitiesLists.forEach(cityList => {
+        const option = document.createElement("option");
+        option.value = cityList;
+        option.innerText = cityList.join(", ");
+        locationsList.appendChild(option);
+    })
+})
+
 
 
 function hideElements(arr) {

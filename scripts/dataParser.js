@@ -1,6 +1,5 @@
 function parseCsv(data) {
     console.log("Parsing csv.");
-    console.log("For data", data);
     // Removing some chars to get a valid csv
     const cleanStr = (str) => {
         if (!str) {

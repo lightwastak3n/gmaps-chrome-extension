@@ -19,10 +19,12 @@
         <main>
 
             <div class="option">
-                <input id="business-type" class="input-style" type="text" name="business-type" value="" placeholder="Type of business">
+                <input id="business-type" list="niche-list" class="input-style" name="business-type" placeholder="Type or choose a business type">
+                <datalist id="niche-list"></datalist>
             </div>
 
-            <div class="option">
+            <div class="option places-section">
+                <select id="locations-list" class="input-style"></select>
                 <textarea id="scrape-locations" class="input-style" rows="" cols="" placeholder="Pizza in London&#10;Car repair in Berlin&#10;dentist in las vegas"></textarea>
             </div>
 
