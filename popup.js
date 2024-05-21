@@ -31,7 +31,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 runButton.addEventListener('click', async function() {
     // Check if trial is over
     const currentUsage = await chrome.storage.local.get("usageCount"); 
-    if (currentUsage.usageCount > 5) {
+    if (currentUsage.usageCount > 1000) {
         mainSection.style.display = "none";
         trialOver.hidden = false;
         return;
@@ -44,25 +44,20 @@ runButton.addEventListener('click', async function() {
     let leadsTotal = 0;
     const scrollTime = scrollingChoice.value;
 
-    let data = [["name", "type", "rating", "address", "phone", "website", "place"]];
+    let data = [["name", "type", "rating", "address", "place", "phone", "website"]];
     const totalTasks = searchStrings.length;
     let taskNum = 1;
     for (const searchStr of searchStrings) {
         updateTask(`${taskNum}/${totalTasks} ${searchStr}`);
         let newData = await getLocationListings(searchStr, scrollTime, "search");
-        const place = searchStr.split(" in ")[1];
-        for (let i = 0; i < newData.length; i++) {
-            newData[i].push(place);
-        }
         data.push(...newData);
-
         leadsTotal += newData.length;
         updateLeads(leadsTotal);
         taskNum++;
     }
     // Search current google maps view if the inputs are empty 
     if (searchStrings.length === 0) {
-        let newData = await getLocationListings(undefined, scrollTime);
+        let newData = await getLocationListings(undefined, scrollTime, undefined);
         data.push(...newData);
     }
     await updateUsageCount();
@@ -71,6 +66,14 @@ runButton.addEventListener('click', async function() {
 
 
 async function getLocationListings(searchStr, scrollTime, method) {
+    // Check if word "in" is in searchStr and split by that otherwise the place is everything but first word?    
+    console.log("called getLocationSettings with searchStr", searchStr);
+    let placeName = "";
+    if (searchStr && searchStr.split(" ").includes("in")) {
+        placeName = capitalizeEachWord(searchStr.split(" in ")[1].trim());
+    } else if (searchStr) {
+        placeName = capitalizeEachWord(searchStr.split(" ").slice(1).join(" "));
+    }
     if (method === "url") {
         const mapsUrl = createUrl(searchStr);
         await chrome.tabs.update(currentTab.id, {url: mapsUrl});
@@ -90,7 +93,8 @@ async function getLocationListings(searchStr, scrollTime, method) {
     });
     let locData = await chrome.scripting.executeScript({
         target: {tabId: currentTab.id},
-        function: scrapeListings
+        function: scrapeListings,
+        args: [placeName]
     });
     return locData[0].result; 
 }
@@ -113,7 +117,7 @@ async function scrollListings(scrollTime) {
 }
 
 
-function scrapeListings() {
+function scrapeListings(placeName) {
     const findPhoneNumber = (str) => {
         if (str === undefined) {
             return "";
@@ -141,7 +145,7 @@ function scrapeListings() {
         const [businessType, address] = mainData[2].split(" · ");
         const phoneNumber = findPhoneNumber(mainData[3]);
         const website = findLink(link.innerHTML);
-        places.push([businessName, businessType, rating, address, phoneNumber, website]);
+        places.push([businessName, businessType, rating, address, placeName, phoneNumber, website]);
     }
     return places;
 }
