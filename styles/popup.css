@@ -38,7 +38,7 @@ header div h1 {
 #trial-over {
     background-color: var(--comment);
     color: var(--red);
-    padding: 5px;
+    padding: 10px;
     border-style: 2px solid var(--red);
     border-radius: 10px;
     font-weight: bold;
@@ -70,18 +70,18 @@ main {
 }
 
 .input-style {
-    border: 3px solid transparent;
+    border: 2px solid transparent;
     color: var(--foreground);
     border-radius: 4px;
     background-color: var(--comment);
 }
 
 .input-style:hover {
-    border: 3px solid var(--red);
+    border: 2px solid var(--red);
 }
 
 .input-style:focus {
-    border: 3px solid var(--red);
+    border: 2px solid var(--red);
 }
 
 select {

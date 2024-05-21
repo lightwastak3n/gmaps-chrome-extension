@@ -1,5 +1,5 @@
 async function updateUsageCount() {
-    let currentCount = await chrome.storage.local.get("usageCount");
+    const currentCount = await chrome.storage.local.get("usageCount");
     let totalCount = 1;
     if (currentCount.usageCount) {
         totalCount += currentCount.usageCount;
@@ -10,18 +10,28 @@ async function updateUsageCount() {
 
 async function getSavedOption(optionName) {
     const data = await chrome.storage.local.get(optionName);
-    return data.optionName;
+    return data[optionName];
 }
 
 
 async function saveOptions(searchMethod, niches, cities) {
+    console.log("Called saveOptions with data", searchMethod, niches, cities);
     const data = await chrome.storage.local.get(null);
     const dataToStore = {};
     if (searchMethod !== data.searchMethod) {
         dataToStore["searchMethod"] = searchMethod;
     }
-    const newNiches = [...data.niches, niches];
-    const newCities = [...data.cities, cities];
+    let allNiches = data.niches ? [...data.niches] : [];
+    if (niches) {
+        allNiches.push(niches);
+        dataToStore["niches"] = allNiches;
+    }
+    let allCities = data.cities ? [...data.cities] : [];
+    if (cities) {
+        allCities.push(cities);
+        dataToStore["cities"] = allCities;
+    }
     await chrome.storage.local.set(dataToStore);
+    console.log("Saved new options", dataToStore);
 }
 

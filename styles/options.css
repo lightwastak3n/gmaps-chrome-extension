@@ -92,3 +92,7 @@ footer a{
     color: var(--green);
     text-decoration: none;
 }
+
+#status {
+    color: var(--yellow);
+}

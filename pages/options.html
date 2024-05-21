@@ -14,17 +14,22 @@
         <label for="search-method">Choose a search method</label>
         <select id="search-method">
            <option value="url">Search using url</option> 
-           <option value="search-button">Search using search button</option> 
+           <option value="search-button" selected>Search using search button</option> 
         </select>
             
-        <label for="niche">Niche</label>
-        <textarea id="niche" class="textarea-field" placeholder="dentist, plumber, lawyer"></textarea>
+        <label for="niches">Niches</label>
+        <textarea id="niches" class="textarea-field" placeholder="dentist&#10;plumber&#10;lawyer"></textarea>
             
         <label for="cities">Cities</label>
-        <textarea id="cities" class="textarea-field" placeholder="New York City, Paris, Berlin, Lagos, London Ohio"></textarea>
+        <textarea id="cities" class="textarea-field" placeholder="New York City&#10;Paris&#10;Berlin&#10;Lagos&#10;London Ohio"></textarea>
         <button class="button">Save</button>
+        <p id="status" hidden><strong>SAVED</strong></p>
+        <footer>
+            <a href="instructions.html#settings-section">Instructions</a>
+        </footer>
     </div>
-    <script type="text/javascript" src="scripts/storage.js"></script>
-    <script type="text/javascript" src="scripts/options.js"></script>
+
+    <script type="text/javascript" src="../scripts/storage.js"></script>
+    <script type="text/javascript" src="../scripts/options.js"></script>
     </body>
 </html>
