@@ -13,6 +13,9 @@ const nichesList = document.getElementById("niche-list");
 const locationsList = document.getElementById("locations-list");
 
 
+let SCRAPING = false;
+
+
 // Populate niches
 getSavedOption("niches").then((storedNichesList) => {
     storedNichesList.forEach(niche => {
@@ -33,10 +36,11 @@ getSavedOption("cities").then((storedCitiesLists) => {
 })
 
 
-
-function hideElements(arr) {
-    for (const el of arr) {
-        el.hidden = true;
+function changeRunButton(mode) {
+    if (mode === "run") {
+        runButton.innerHTML = "<img src='images/run.png' alt=''><span>Run</span>"; 
+    } else {
+        runButton.innerHTML = "<img src='images/stop.png' alt=''><span>Stop</span>"; 
     }
 }
 
@@ -51,7 +55,17 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 })
 
 
+let data = [["name", "type", "rating", "address", "place", "phone", "website"]];
 runButton.addEventListener('click', async function() {
+    if (SCRAPING) {
+        SCRAPING = false;
+        processData(data);
+        data = [["name", "type", "rating", "address", "place", "phone", "website"]];
+        changeRunButton("run");;
+        return;
+    }
+    SCRAPING = true;
+    changeRunButton("stop");
     // Check if trial is over
     const currentUsage = await chrome.storage.local.get("usageCount"); 
     if (currentUsage.usageCount > 1000) {
@@ -67,7 +81,6 @@ runButton.addEventListener('click', async function() {
     let leadsTotal = 0;
     const scrollTime = scrollingChoice.value;
 
-    let data = [["name", "type", "rating", "address", "place", "phone", "website"]];
     const totalTasks = searchStrings.length;
     let taskNum = 1;
     for (const searchStr of searchStrings) {
