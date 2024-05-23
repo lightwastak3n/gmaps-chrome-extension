@@ -16,7 +16,7 @@ body {
     font-family: "Roboto", sans-serif;
     font-size: 1rem; 
     color: var(--foreground);
-    min-width: 400px;
+    min-width: 450px;
     background-image: url("../images/map_lights_dracula.jpg");
     background-position: center;
 }
@@ -61,7 +61,7 @@ main {
     padding: 10px;
 }
 
-#scrape-locations {
+#locations-box {
     width: 70%;
     height: 80px;
     padding: 10px;
@@ -76,7 +76,7 @@ main {
 
 ::placeholder {
     color: var(--foreground);
-    font-family: "Roboto", sans-serif;
+    opacity: 0.6;
 }
 
 .input-style {

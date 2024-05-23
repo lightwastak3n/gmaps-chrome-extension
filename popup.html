@@ -14,7 +14,7 @@
         </header>
 
         <p id="not-on-maps" hidden>Only works while on <a href='https://www.google.com/maps' target='_blank'>Google Maps</a></p>
-        <p id="trial-over">Trial version. Uses left <span id="uses">5</span>.</p>
+        <p id="trial-over" hidden>Trial version. Uses left <span id="uses">5</span>.</p>
 
         <main>
 
@@ -24,8 +24,11 @@
             </div>
 
             <div class="option places-section">
-                <select id="locations-list" class="input-style"></select>
-                <textarea id="scrape-locations" class="input-style" rows="" cols="" placeholder="Pizza in London&#10;Car repair in Berlin&#10;dentist in las vegas"></textarea>
+                <div>
+                    <select id="locations-dropdown" class="input-style"></select>
+                    <label for="locations-dropdown">Use saved locations or type them below</label>
+                </div>
+                <textarea id="locations-box" class="input-style" rows="" cols="" placeholder="Pizza in London&#10;Car repair in Berlin&#10;dentist in las vegas"></textarea>
             </div>
 
             <div class="option">
@@ -44,7 +47,7 @@
                     <option value="80">80s</option>
                     <option value="120">120s</option>
                 </select>
-                <label for="data-format">How long to scroll each listing</label>
+                <label for="scrolling-time">How long to scroll each listing</label>
             </div>
 
             <div class="option" id="buttons">

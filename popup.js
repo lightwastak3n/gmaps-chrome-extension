@@ -1,7 +1,8 @@
 const runButton = document.getElementById("runbutton");
 const notOnMaps = document.getElementById("not-on-maps");
 const formatChoice = document.getElementById("data-format");
-const scrapeLocations = document.getElementById("scrape-locations");
+const locationsBox = document.getElementById("locations-box");
+const locationsDropdown = document.getElementById("locations-dropdown");
 const typeOfBusiness = document.getElementById("business-type");
 const leadsStatus = document.getElementById("leads-num");
 const bottomSection = document.getElementById("bottom");
@@ -10,29 +11,31 @@ const scrollingChoice = document.getElementById("scrolling-time");
 const trialOver = document.getElementById("trial-over");
 const mainSection = document.querySelector("main");
 const nichesList = document.getElementById("niche-list");
-const locationsList = document.getElementById("locations-list");
 
 
 let SCRAPING = false;
 
-
 // Populate niches
 getSavedOption("niches").then((storedNichesList) => {
-    storedNichesList.forEach(niche => {
-        const option = document.createElement("option");
-        option.value = niche;
-        nichesList.appendChild(option);
-    });
+    if (storedNichesList) {
+        storedNichesList.forEach(niche => {
+            const option = document.createElement("option");
+            option.value = niche;
+            nichesList.appendChild(option);
+        });
+    }
 })
 
 // Populate cities
 getSavedOption("cities").then((storedCitiesLists) => {
-    storedCitiesLists.forEach(cityList => {
-        const option = document.createElement("option");
-        option.value = cityList;
-        option.innerText = cityList.join(", ");
-        locationsList.appendChild(option);
-    })
+    if (storedCitiesLists) {
+        storedCitiesLists.forEach(cityList => {
+            const option = document.createElement("option");
+            option.value = cityList;
+            option.innerText = cityList.join(", ");
+            locationsDropdown.appendChild(option);
+        })
+    }
 })
 
 
@@ -73,14 +76,12 @@ runButton.addEventListener('click', async function() {
         trialOver.hidden = false;
         return;
     };
-
-    // Get the data from the extension inputs
-    const searchStrings = getSearchStrings();
     // Setup progress bar
     bottomSection.hidden = false;
     let leadsTotal = 0;
     const scrollTime = scrollingChoice.value;
-
+    // Get the data from the extension inputs
+    const searchStrings = getSearchStrings();
     const totalTasks = searchStrings.length;
     let taskNum = 1;
     for (const searchStr of searchStrings) {
@@ -97,7 +98,9 @@ runButton.addEventListener('click', async function() {
         data.push(...newData);
     }
     await updateUsageCount();
-    processData(data)
+    processData(data);
+    changeRunButton("run");
+    SCRAPING = false;
 });
 
 
@@ -149,6 +152,9 @@ async function scrollListings(scrollTime) {
         }
         // Wait for the new results to load
         await new Promise(resolve => setTimeout(resolve, 3000));
+        // if (SCRAPING == false) {
+        //     break;
+        // }
     }
 }
 
@@ -197,16 +203,34 @@ function processData(data) {
 
 
 function getSearchStrings() {
-    const locationValues = scrapeLocations.value;
-    let searchStrings = [];
-    if (locationValues) {
-        const locations = scrapeLocations.value.split("\n");
-        const bType = typeOfBusiness.value;
-        for (loc of locations) {
-            let sString = bType.length > 0 ? `${bType} in ${loc.trim()}` : loc.trim();
-            searchStrings.push(sString);
+    // Check business input
+    let businessToSearch = []; 
+    if (typeOfBusiness.value.includes(",")) {
+        businessToSearch = typeOfBusiness.value.split(",");
+    } else {
+        businessToSearch.push(typeOfBusiness.value);
+    }
+    console.log("Btype processed", businessToSearch)
+    // Check the locations inputs
+    let locationsToSearch;
+    if (locationsBox.value) {
+        locationsToSearch = locationsBox.value.split("\n");
+        if (businessToSearch[0].length === 0) {
+            return locationsToSearch;
         }
-    } 
+    } else if (locationsDropdown.value) {
+        locationsToSearch = locationsDropdown.value.split(",");
+    }
+    let searchStrings = [];
+    if (locationsToSearch && businessToSearch[0].length > 0) {
+        for (const bt of businessToSearch) {
+            for (const loc of locationsToSearch) {
+                let sString = `${bt} in ${loc.trim()}`;
+                searchStrings.push(sString);
+            }
+        }
+    }
+    console.log("Search strings", searchStrings);
     return searchStrings;
 }
 
