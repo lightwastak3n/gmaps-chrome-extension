@@ -80,13 +80,15 @@ runButton.addEventListener('click', async function() {
     bottomSection.hidden = false;
     let leadsTotal = 0;
     const scrollTime = scrollingChoice.value;
+    //Get search method
+    const searchMethod = await getSavedOption("searchMethod");
     // Get the data from the extension inputs
     const searchStrings = getSearchStrings();
     const totalTasks = searchStrings.length;
     let taskNum = 1;
     for (const searchStr of searchStrings) {
         updateTask(`${taskNum}/${totalTasks} ${searchStr}`);
-        let newData = await getLocationListings(searchStr, scrollTime, "search");
+        let newData = await getLocationListings(searchStr, scrollTime, searchMethod);
         data.push(...newData);
         leadsTotal += newData.length;
         updateLeads(leadsTotal);
@@ -118,7 +120,7 @@ async function getLocationListings(searchStr, scrollTime, method) {
         await chrome.tabs.update(currentTab.id, {url: mapsUrl});
         // Wait for the page to load
         await new Promise(resolve => setTimeout(resolve, 3000));
-    } else if (method === "search") {
+    } else if (method === "search-button") {
         await chrome.scripting.executeScript({
             target: {tabId: currentTab.id},
             function: runSearch,
