@@ -6,7 +6,7 @@ const statusNotification = document.querySelector("#status");
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    getSavedOptions("searchMethod").then((currentSearchMethod) =>{
+    getSavedOption("searchMethod").then((currentSearchMethod) =>{
         if (currentSearchMethod) {
             searchChoice.value = currentSearchMethod;
         }

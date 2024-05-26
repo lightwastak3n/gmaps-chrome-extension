@@ -32,7 +32,7 @@ getSavedOption("cities").then((storedCitiesLists) => {
         storedCitiesLists.forEach(cityList => {
             const option = document.createElement("option");
             option.value = cityList;
-            option.innerText = cityList.join(", ");
+            option.innerText = cityList;
             locationsDropdown.appendChild(option);
         })
     }
