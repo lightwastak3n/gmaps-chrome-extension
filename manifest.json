@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Google Maps Scraper",
     "description": "Scrape businesses from Google maps.",
-    "version": "1.2",
+    "version": "1.31",
     "permissions": ["activeTab", "scripting", "storage"],
     "host_permissions": ["https://google.com/maps/*"],
 	"options_page": "pages/options.html",

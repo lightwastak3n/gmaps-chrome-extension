@@ -80,12 +80,13 @@ runButton.addEventListener('click', async function() {
     bottomSection.hidden = false;
     let leadsTotal = 0;
     const scrollTime = scrollingChoice.value;
-    //Get search method
-    const searchMethod = await getSavedOption("searchMethod");
+    //Get search method or default to search-button method
+    const searchMethod = await getSavedOption("searchMethod") || "search-button";
     // Get the data from the extension inputs
     const searchStrings = getSearchStrings();
     const totalTasks = searchStrings.length;
     let taskNum = 1;
+    console.log("Got all the search strings", searchStrings);
     for (const searchStr of searchStrings) {
         updateTask(`${taskNum}/${totalTasks} ${searchStr}`);
         let newData = await getLocationListings(searchStr, scrollTime, searchMethod);
@@ -186,7 +187,13 @@ function scrapeListings(placeName) {
         const businessName = mainData[0];
         let rating = mainData[1].includes("reviews") ? "No reviews" : mainData[1].split("(")[0];
         rating = rating.replace(",", ".");
-        const [businessType, address] = mainData[2].split(" · ");
+        const typeAndAddress = mainData[2].split("·").map((item) => item.trim());
+        const businessType = typeAndAddress[0];
+        let address = "";
+        if (typeAndAddress.length > 1) {
+            const lastItem = typeAndAddress[typeAndAddress.length-1];
+            address = lastItem.length > 1 ? lastItem : "";
+        }
         const phoneNumber = findPhoneNumber(mainData[3]);
         const website = findLink(link.innerHTML);
         places.push([businessName, businessType, rating, address, placeName, phoneNumber, website]);
@@ -218,6 +225,7 @@ function getSearchStrings() {
     if (locationsBox.value) {
         locationsToSearch = locationsBox.value.split("\n");
         if (businessToSearch[0].length === 0) {
+            console.log("No separate business type. Returning", locationsToSearch);
             return locationsToSearch;
         }
     } else if (locationsDropdown.value) {
